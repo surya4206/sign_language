@@ -1,0 +1,51 @@
+buildscript {
+    ext.kotlin_version = "1.9.10" // Kotlin version
+    repositories {
+        google() // Google's Maven repository
+        mavenCentral() // Maven Central repository
+    }
+    dependencies {
+        //classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.0.2'
+
+        //classpath 'com.android.tools.build:gradle:8.1.4' // Latest Android Gradle plugin
+        classpath 'com.google.gms:google-services:4.4.2' // Google services, if needed for Firebase
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" // Kotlin Gradle plugin
+    }
+}
+
+allprojects {
+    repositories {
+        google() // Google's Maven repository for all projects
+        mavenCentral() // Maven Central repository for all projects
+    }
+}
+
+rootProject.buildDir = "../build" // Set the root project build directory
+subprojects {
+    // Configure Android settings for subprojects if they use the Android plugin
+    afterEvaluate { project ->
+        if (project.plugins.hasPlugin("com.android.application") ||
+                project.plugins.hasPlugin("com.android.library")) {
+            project.android {
+                compileSdkVersion 34
+                buildToolsVersion "34.0.0"
+            }
+        }
+    }
+    project.buildDir = "${rootProject.buildDir}/${project.name}" // Set the subproject build directory
+    project.evaluationDependsOn(":app") // Ensure that all subprojects depend on the app project
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir // Clean task to delete the build directory
+}
+
+// Ensure that the Kotlin version resolution is consistent with the plugin version
+configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == 'org.jetbrains.kotlin') {
+            details.useVersion "1.9.10" // Match the Kotlin version specified
+        }
+    }
+}

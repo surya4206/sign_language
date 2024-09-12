@@ -1,0 +1,60 @@
+name: sign_language_project
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: ^3.4.0
+  firebase_storage: ^12.2.0
+  firebase_auth: ^5.2.0
+  provider: ^6.1.2
+  cloud_firestore: ^5.3.0
+  tflite_flutter: ^0.11.0
+
+  camera: ^0.11.0+2
+  video_player: ^2.4.2
+  image: ^4.2.0  # Updated to the latest stable version
+  path_provider: ^2.0.11
+
+  # The following adds the Cupertino Icons font to your application.
+  cupertino_icons: ^1.0.8
+  #flutter_mediapipe: ^0.0.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  google_fonts: ^6.2.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/kannada_letter.png
+    - assets/hand_camera.png
+    - assets/sign_language_ka.jpg
+    - assets/sign_language_kha.jpg
+    - assets/sign_language_ga.jpg
+    - assets/sign_language_gha.jpg
+    - assets/sign_language_na1.jpg
+    - assets/sign_language_cha.jpg
+    - assets/sign_language_chha.jpg
+    - assets/sign_language_ja.jpg
+    - assets/sign_language_jha.jpg
+    - assets/sign_language_na2.jpg
+    - assets/sign_language_ta.jpg
+    - assets/sign_language_tta.jpg
+    - assets/sign_language_da.jpg
+    - assets/sign_language_dda.jpg
+    - assets/sign_language_na3.jpg
+    - assets/sign_language_tha.jpg
+    - assets/sign_language_ttha.jpg
+    - assets/sign_language_dha.jpg
+    - assets/sign_language_ddha.jpg
+    - assets/sign_language_na4.jpg
+    - assets/Sign-Language-Recognition.tflite

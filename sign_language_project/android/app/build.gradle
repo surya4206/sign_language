@@ -1,0 +1,82 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin" // Flutter plugin
+    id 'com.google.gms.google-services' // Apply the Google Services plugin
+}
+
+android {
+    namespace = "com.example.sign_language_project"
+    compileSdk = 34 // Updated to the latest stable version
+    buildToolsVersion "34.0.0" // Updated to match compileSdk version
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8" // Target JVM version
+    }
+
+    defaultConfig {
+        applicationId = "com.example.sign_language_project"
+        minSdk = 23 // Updated to a more recent version
+        targetSdk = 34 // Updated to the latest stable version
+        versionCode = 1
+        versionName = "1.0"
+
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64' // Include required architectures
+        }
+    }
+
+    buildTypes {
+        release {
+            // Uncomment and configure the following lines if you need code shrinking or ProGuard
+            // minifyEnabled false
+            // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig = signingConfigs.debug
+        }
+    }
+
+    packagingOptions {
+        pickFirst 'lib/armeabi-v7a/libtensorflowlite_c.so'
+        pickFirst 'lib/arm64-v8a/libtensorflowlite_c.so'
+        pickFirst 'lib/x86/libtensorflowlite_c.so'
+        pickFirst 'lib/x86_64/libtensorflowlite_c.so'
+    }
+}
+
+dependencies {
+    implementation 'org.tensorflow:tensorflow-lite:2.11.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.10"
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // Firebase dependencies using the BoM
+    implementation platform('com.google.firebase:firebase-bom:32.0.0')
+    implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.firebase:firebase-storage'
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.android.gms:play-services-auth:21.2.0'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-messaging'
+
+    // ExoPlayer or other dependencies if needed
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.19.1'
+
+    // TensorFlow Lite dependencies
+    implementation 'org.tensorflow:tensorflow-lite:2.12.0'
+    implementation 'org.tensorflow:tensorflow-lite-gpu:2.12.0' // Optional, for GPU acceleration
+    implementation 'org.tensorflow:tensorflow-lite-support:0.4.0' // Optional, for additional support libraries
+}
+
+flutter {
+    source = "../.." // Ensure this path is correct for your Flutter project
+}
+
+apply plugin: 'com.google.gms.google-services' // Ensure this line is included
