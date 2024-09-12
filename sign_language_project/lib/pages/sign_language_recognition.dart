@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
 import 'dart:isolate';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class SignLanguageRecognitionPage extends StatefulWidget {
   @override
@@ -12,8 +13,6 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
   CameraController? _cameraController;
   List<CameraDescription>? _cameras;
   bool _isCameraInitialized = false;
-  bool _isModelLoaded = false;
-  Interpreter? _interpreter;
   int _selectedCameraIndex = 0;
   
   Isolate? _isolate;
@@ -25,14 +24,13 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
   void initState() {
     super.initState();
     _initializeCamera(_selectedCameraIndex);
-    _loadModel();
   }
 
   Future<void> _initializeCamera(int cameraIndex) async {
     try {
       _cameras = await availableCameras();
       if (_cameras!.isNotEmpty) {
-        _cameraController = CameraController(_cameras![cameraIndex], ResolutionPreset.high);
+        _cameraController = CameraController(_cameras![cameraIndex], ResolutionPreset.medium);
         await _cameraController!.initialize();
         setState(() {
           _isCameraInitialized = true;
@@ -44,23 +42,9 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
     }
   }
 
-  Future<void> _loadModel() async {
-    try {
-      _interpreter = await Interpreter.fromAsset('assets/Sign-Language-Recognition.tflite');
-      setState(() {
-        _isModelLoaded = true;
-      });
-    } catch (e) {
-      print('Error loading model: $e');
-      setState(() {
-        _isModelLoaded = false;
-      });
-    }
-  }
-
   void _startImageStream() async {
     _receivePort = ReceivePort();
-    _isolate = await Isolate.spawn(_predictFrame, _receivePort!.sendPort);
+    _isolate = await Isolate.spawn(_processFrame, _receivePort!.sendPort);
     _receivePort!.listen((message) {
       if (message is SendPort) {
         _sendPort = message;
@@ -78,18 +62,42 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
     });
   }
 
-  static void _predictFrame(SendPort sendPort) {
+  static void _processFrame(SendPort sendPort) {
     ReceivePort receivePort = ReceivePort();
     sendPort.send(receivePort.sendPort);
 
-    receivePort.listen((message) {
+    receivePort.listen((message) async {
       if (message is CameraImage) {
-        // Implement your sign language recognition logic here
-        // This is a placeholder prediction
-        String prediction = "Predicted Sign";
+        String prediction = await _sendFrameToServer(message);
         sendPort.send(prediction);
       }
     });
+  }
+
+  static Future<String> _sendFrameToServer(CameraImage image) async {
+    try {
+      // Convert image to byte array
+      List<int> imageBytes = [];
+      for (Plane plane in image.planes) {
+        imageBytes.addAll(plane.bytes);
+      }
+
+      // Send POST request to Flask server
+      var response = await http.post(
+        Uri.parse('http://192.168.0.106:5000/predict'),  // Use 10.0.2.2 for Android emulator, localhost for iOS
+        headers: {'Content-Type': 'application/octet-stream'},
+        body: imageBytes,
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
+        return data['prediction'];
+      } else {
+        return 'Error: ${response.statusCode}';
+      }
+    } catch (e) {
+      return 'Error: $e';
+    }
   }
 
   void _switchCamera() {
@@ -102,14 +110,9 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
     }
   }
 
-  String $_prediction() {
-    return _latestPrediction;
-  }
-
   @override
   void dispose() {
     _cameraController?.dispose();
-    _interpreter?.close();
     _isolate?.kill(priority: Isolate.immediate);
     _receivePort?.close();
     super.dispose();
@@ -121,13 +124,6 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
       return Scaffold(
         appBar: AppBar(title: Text('Sign Language Recognition')),
         body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    if (!_isModelLoaded) {
-      return Scaffold(
-        appBar: AppBar(title: Text('Sign Language Recognition')),
-        body: Center(child: Text('Loading model...')),
       );
     }
 
@@ -145,10 +141,10 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
         children: [
           CameraPreview(_cameraController!),
           StreamBuilder<void>(
-            stream: Stream.periodic(Duration(milliseconds: 100)),
+            stream: Stream.periodic(Duration(milliseconds: 2000)),
             builder: (context, snapshot) {
               return Text(
-                'Prediction: ${$_prediction()}',
+                'Prediction: $_latestPrediction',
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
