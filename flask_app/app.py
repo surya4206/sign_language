@@ -6,6 +6,8 @@ from tensorflow.keras.models import load_model
 from PIL import Image
 import io
 
+model = load_model('mediapipe_lstm_model.h5')
+
 app = Flask(__name__)
 
 @app.route('/predict', methods=['POST'])
@@ -16,13 +18,12 @@ def predict():
     hands = mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_confidence=0.5, min_tracking_confidence=0.5)
     nparr = np.frombuffer(image_data, np.uint8)
     image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    cv2.imwrite('new_image.jpg', image)
+    #cv2.imwrite('new_image.jpg', image)
     label = {0:'cha', 1:'chha', 2:'da', 3:'dda', 4:'ddha', 5:'dha', 6:'ga', 7:'gha', 8:'ja', 9:'jha', 10:'ka', 11:'kha', 12:'na1', 13:'na2', 14:'na3', 15:'na4', 16:'ta', 17:'tha', 18:'tta', 19:'ttha'}
 
     
     #Process the image and find hands
-    results = hands.process(image)
-    print(results.multi_hand_landmarks)
+    results = hands.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     if results.multi_hand_landmarks:
         keypoints = []
         for hand_landmarks in results.multi_hand_landmarks:
@@ -44,9 +45,8 @@ def predict():
         prediction = model.predict(keypoints)
         predicted_label = np.argmax(prediction, axis=1)
         print(predicted_label)
-        return jsonify({'prediction': label[predicted_label]})
+        return jsonify({'prediction': label[predicted_label[0]]})
     return jsonify({'prediction': 'None'})
 
 if __name__ == '__main__':
-    model = load_model('./mediapipe_lstm_model.h5')
     app.run(host='0.0.0.0', port=5000)

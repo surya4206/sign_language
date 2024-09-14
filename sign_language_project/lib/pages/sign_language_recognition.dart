@@ -4,6 +4,7 @@ import 'dart:isolate';
 import 'dart:convert';
 import 'package:image/image.dart' as img;
 import 'package:http/http.dart' as http;
+import 'package:yuv_to_png/yuv_to_png.dart';
 
 class SignLanguageRecognitionPage extends StatefulWidget {
   @override
@@ -81,15 +82,18 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
       // Convert image to byte array
            
       // Step 2: Encode the RGB image data (e.g., to PNG)
-      List<int>? pngBytes = _convertYUVtoRGB(image);
-      if (pngBytes == null) {
+      //List<int>? pngBytes = _convertYUVtoRGB(image);
+      List<int> png = YuvToPng.yuvToPng(image);
+      // img.PngEncoder pngEncoder = new img.PngEncoder(level: 0);
+      //   List<int> png = pngEncoder.encode(png);
+      if (png == null) {
         return 'Error: Failed to convert image';
       } 
       // Send POST request to Flask server
       var response = await http.post(
         Uri.parse('http://192.168.0.106:5000/predict'),  // Use 10.0.2.2 for Android emulator, localhost for iOS
         headers: {'Content-Type': 'application/octet-stream'},
-        body: pngBytes,
+        body: png,
       );
 
       if (response.statusCode == 200) {
@@ -185,7 +189,7 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
         children: [
           CameraPreview(_cameraController!),
           StreamBuilder<void>(
-            stream: Stream.periodic(Duration(milliseconds: 2000)),
+            stream: Stream.periodic(Duration(milliseconds: 20000)),
             builder: (context, snapshot) {
               return Text(
                 'Prediction: $_latestPrediction',
