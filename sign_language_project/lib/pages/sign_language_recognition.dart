@@ -57,11 +57,14 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
         });
       }
     });
-
+    int frameCount = 0;
     await _cameraController!.startImageStream((CameraImage image) {
+      frameCount++;
+      if(frameCount % 15 == 0)
+      {
       if (_sendPort != null) {
         _sendPort!.send(image);
-      }
+      }}
     });
   }
 
@@ -79,17 +82,10 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
 
   static Future<String> _sendFrameToServer(CameraImage image) async {
     try {
-      // Convert image to byte array
-           
-      // Step 2: Encode the RGB image data (e.g., to PNG)
-      //List<int>? pngBytes = _convertYUVtoRGB(image);
       List<int> png = YuvToPng.yuvToPng(image);
-      // img.PngEncoder pngEncoder = new img.PngEncoder(level: 0);
-      //   List<int> png = pngEncoder.encode(png);
       if (png == null) {
         return 'Error: Failed to convert image';
       } 
-      // Send POST request to Flask server
       var response = await http.post(
         Uri.parse('http://192.168.0.106:5000/predict'),  // Use 10.0.2.2 for Android emulator, localhost for iOS
         headers: {'Content-Type': 'application/octet-stream'},
@@ -156,8 +152,6 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
     }
   }
 
-  
-
   @override
   void dispose() {
     _cameraController?.dispose();
@@ -189,7 +183,7 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
         children: [
           CameraPreview(_cameraController!),
           StreamBuilder<void>(
-            stream: Stream.periodic(Duration(milliseconds: 20000)),
+            stream: Stream.periodic(Duration(milliseconds: 100)),
             builder: (context, snapshot) {
               return Text(
                 'Prediction: $_latestPrediction',
