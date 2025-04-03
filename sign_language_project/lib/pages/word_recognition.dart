@@ -75,24 +75,29 @@ class _WordRecognitionState extends State<WordRecognition> {
     }
   }
 
-  Future<String> _sendVideoToServer(XFile videoFile) async {
-    try {
-      List<int> videoBytes = await videoFile.readAsBytes();
-      var response = await http.post(
-        Uri.parse('http://192.168.124.58:5000/predict_video'),
-        headers: {'Content-Type': 'video/mp4'},
-        body: videoBytes,
-      );
+Future<String> _sendVideoToServer(XFile videoFile) async {
+  try {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('http://192.168.214.58:5000/predict_video')
+    );
+    
+    request.files.add(
+      await http.MultipartFile.fromPath('video', videoFile.path)
+    );
+    
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
 
-      if (response.statusCode == 200) {
-        Map<String, dynamic> data = json.decode(response.body);
-        return data['prediction'] ?? 'No prediction';
-      }
-      return 'Error: ${response.statusCode}';
-    } catch (e) {
-      return 'Error: $e';
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = json.decode(response.body);
+      return data['prediction'] ?? 'No prediction';
     }
+    return 'Error: ${response.statusCode}';
+  } catch (e) {
+    return 'Error: $e';
   }
+}
 
   void _switchCamera() {
     if (_cameras != null && _cameras!.length > 1) {
