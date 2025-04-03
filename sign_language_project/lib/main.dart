@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'pages/home_page.dart';
 import 'pages/sign_language_recognition.dart';
 import 'pages/kannada_alphabets.dart';
-import 'pages/search_page.dart';
+//import 'pages/search_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,11 +18,12 @@ class MyApp extends StatelessWidget {
       title: 'Sign Language App',
       theme: _buildThemeData(),
       initialRoute: '/',
+      debugShowCheckedModeBanner: false,
       routes: {
         '/': (context) => HomePage(),  // Removed const
         '/recognition': (context) => SignLanguageRecognitionPage(),  // Removed const
         '/alphabets': (context) => KannadaAlphabetsPage(),  // Removed const
-        '/search': (context) => SearchPage(),  // Removed const
+        //'/search': (context) => SearchPage(),  // Removed const
       },
     );
   }

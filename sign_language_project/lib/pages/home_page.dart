@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sign_language_project/pages/kannada_alphabets.dart';
-import 'package:sign_language_project/pages/search_page.dart';
+import 'package:sign_language_project/pages/word_recognition.dart';
 import 'package:sign_language_project/pages/sign_language_recognition.dart';
 
 class HomePage extends StatelessWidget {
@@ -46,24 +46,30 @@ class HomePage extends StatelessWidget {
                   mainAxisSpacing: 16,
                   crossAxisSpacing: 16,
                   children: [
-                    _buildGridItem(
-                      context,
-                      icon: Icons.search,
-                      label: 'Search Signs',
-                      route: const SearchPage(),
-                    ),
+                    // _buildGridItem(
+                    //   context,
+                    //   icon: Icons.search,
+                    //   label: 'Search Signs',
+                    //   route: const SearchPage(),
+                    // ),
                     _buildGridItem(
                       context,
                       iconData: 'assets/kannada_letter.png',
                       label: 'Kannada Alphabets',
                       route: const KannadaAlphabetsPage(),
                     ),
+                    _buildGridItem(
+                        context,
+                        iconData: 'assets/hand_camera.png',
+                        label: 'Character Recognition',
+                        route: SignLanguageRecognitionPage(),
+                    ),
                     Center( // Center the third item
                       child: _buildGridItem(
                         context,
                         iconData: 'assets/hand_camera.png',
-                        label: 'Sign Recognition',
-                        route: SignLanguageRecognitionPage(),
+                        label: 'Word Recognition',
+                        route: WordRecognition(),
                       ),
                     ),
                   ],

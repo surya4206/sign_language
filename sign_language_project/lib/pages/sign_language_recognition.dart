@@ -87,7 +87,7 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
         return 'Error: Failed to convert image';
       } 
       var response = await http.post(
-        Uri.parse('http://192.168.0.106:5000/predict'),  // Use 10.0.2.2 for Android emulator, localhost for iOS
+        Uri.parse('http://192.168.124.58:5000/predict'),  // Use 10.0.2.2 for Android emulator, localhost for iOS
         headers: {'Content-Type': 'application/octet-stream'},
         body: png,
       );
@@ -104,43 +104,6 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
     }
   }
 
-  static List<int>? _convertYUVtoRGB(CameraImage image) {
-  try {
-    final int width = image.width;
-    final int height = image.height;
-    final int uvRowStride = image.planes[1].bytesPerRow;
-    final int uvPixelStride = image.planes[1].bytesPerPixel!;
-
-    var rgb = img.Image(height:height, width:width);
-
-    for (int x = 0; x < width; x++) {
-      for (int y = 0; y < height; y++) {
-        final int uvIndex = uvPixelStride * (x / 2).floor() + uvRowStride * (y / 2).floor();
-        final int index = y * width + x;
-
-        final yp = image.planes[0].bytes[index];
-        final up = image.planes[1].bytes[uvIndex];
-        final vp = image.planes[2].bytes[uvIndex];
-
-        int r = (yp + vp * 1436 / 1024 - 179).round().clamp(0, 255);
-        int g = (yp - up * 46549 / 131072 + 44 - vp * 93604 / 131072 + 91).round().clamp(0, 255);
-        int b = (yp + up * 1814 / 1024 - 227).round().clamp(0, 255);
-        const shift = (0xFF << 24);
-        if (rgb.isBoundsSafe(height-y, x)){ 
-              rgb.setPixelRgba(height-y, x, r , g ,b ,shift); 
-        } 
-          }
-        }
-
-        img.PngEncoder pngEncoder = new img.PngEncoder(level: 0);
-        List<int> png = pngEncoder.encode(rgb);
-        return png;  
-      } catch (e) {
-        print(">>>>>>>>>>>> ERROR:" + e.toString());
-      }
-      return null;
-
-}
 
   void _switchCamera() {
     if (_cameras != null && _cameras!.length > 1) {

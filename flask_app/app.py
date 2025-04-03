@@ -5,6 +5,7 @@ import numpy as np
 from tensorflow.keras.models import load_model
 from PIL import Image
 import io
+import gc
 
 model = load_model('mediapipe_lstm_model.h5')
 
@@ -19,7 +20,7 @@ def predict():
     nparr = np.frombuffer(image_data, np.uint8)
     image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     #cv2.imwrite('new_image.jpg', image)
-    label = {0:'cha', 1:'chha', 2:'da', 3:'dda', 4:'ddha', 5:'dha', 6:'ga', 7:'gha', 8:'ja', 9:'jha', 10:'ka', 11:'kha', 12:'na1', 13:'na2', 14:'na3', 15:'na4', 16:'ta', 17:'tha', 18:'tta', 19:'ttha'}
+    label = {0:'ಚ', 1:'ಛ', 2:' ಡ', 3:'ಢ', 4:'ಧ', 5:'ದ', 6:'ಗ', 7:'ಘ', 8:'ಜ', 9:'ಝ', 10:'ಕ', 11:'ಖ', 12:'ಙ', 13:'ಞ', 14:'ಣ', 15:'ನ', 16:'ಟ', 17:'ತ', 18:' ಠ', 19:'ಥ'}
 
     
     #Process the image and find hands
@@ -45,6 +46,7 @@ def predict():
         prediction = model.predict(keypoints)
         predicted_label = np.argmax(prediction, axis=1)
         print(predicted_label)
+        gc.collect();
         return jsonify({'prediction': label[predicted_label[0]]})
     return jsonify({'prediction': 'None'})
 
