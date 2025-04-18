@@ -87,7 +87,7 @@ class _SignLanguageRecognitionPageState extends State<SignLanguageRecognitionPag
         return 'Error: Failed to convert image';
       } 
       var response = await http.post(
-        Uri.parse('http://192.168.124.58:5000/predict'),  // Use 10.0.2.2 for Android emulator, localhost for iOS
+        Uri.parse('http://192.168.176.58:5000/predict'),  // Use 10.0.2.2 for Android emulator, localhost for iOS
         headers: {'Content-Type': 'application/octet-stream'},
         body: png,
       );

@@ -79,7 +79,7 @@ Future<String> _sendVideoToServer(XFile videoFile) async {
   try {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://192.168.214.58:5000/predict_video')
+      Uri.parse('http://192.168.176.58:5000/predict_video')
     );
     
     request.files.add(
@@ -140,7 +140,7 @@ Future<String> _sendVideoToServer(XFile videoFile) async {
             child: CameraPreview(_cameraController!),
           ),
           Container(
-            color: Colors.white,
+            //color: Colors.white,
             padding: EdgeInsets.symmetric(vertical: 20),
             child: Column(
               mainAxisSize: MainAxisSize.min,

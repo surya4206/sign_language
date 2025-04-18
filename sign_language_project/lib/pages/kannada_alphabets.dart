@@ -35,8 +35,39 @@ class _KannadaAlphabetsPageState extends State<KannadaAlphabetsPage> {
   ];
 
   final List<Map<String, String>> _allWords = const [
+    {'word': 'ಸೋಮವಾರ', 'video': 'assets/monday.mp4', 'transliteration': 'Monday'},
+    {'word': 'ಮಂಗಳವಾರ', 'video': 'assets/tuesday.mp4', 'transliteration': 'Tuesday'},
     {'word': 'ಬುಧವಾರ', 'video': 'assets/wednesday.mp4', 'transliteration': 'Wednesday'},
-    {'word': 'ಸೇಬು', 'video': 'assets/apple.mp4', 'transliteration': 'Apple'},
+    {'word': 'ಗುರುವಾರ', 'video': 'assets/thursday.mp4', 'transliteration': 'Thursday'},
+    {'word': 'ಶುಕ್ರವಾರ', 'video': 'assets/friday.mp4', 'transliteration': 'Friday'},
+    {'word': 'ಶನಿವಾರ', 'video': 'assets/saturday.mp4', 'transliteration': 'Saturday'},
+    {'word': 'ಭಾನುವಾರ', 'video': 'assets/sunday.mp4', 'transliteration': 'Sunday'},
+    {'word': 'ಜನವರಿ', 'video': 'assets/january.mp4', 'transliteration': 'January'},
+    {'word': 'ಫೆಬ್ರವರಿ', 'video': 'assets/february.mp4', 'transliteration': 'February'},
+    {'word': 'ಮಾರ್ಚ್', 'video': 'assets/march.mp4', 'transliteration': 'March'},
+    {'word': 'ಏಪ್ರಿಲ್', 'video': 'assets/april.mp4', 'transliteration': 'April'},
+    {'word': 'ಮೇ', 'video': 'assets/may.mp4', 'transliteration': 'May'},
+    {'word': 'ಜೂನ್', 'video': 'assets/june.mp4', 'transliteration': 'June'},
+    {'word': 'ಜುಲೈ', 'video': 'assets/july.mp4', 'transliteration': 'July'},
+    {'word': 'ಆಗಸ್ಟ್', 'video': 'assets/august.mp4', 'transliteration': 'August'},
+    {'word': 'ಸೆಪ್ಟೆಂಬರ್', 'video': 'assets/september.mp4', 'transliteration': 'September'},
+    {'word': 'ಅಕ್ಟೋಬರ್', 'video': 'assets/october.mp4', 'transliteration': 'October'},
+    {'word': 'ನವೆಂಬರ್', 'video': 'assets/november.mp4', 'transliteration': 'November'},
+    {'word': 'ಡಿಸೆಂಬರ್', 'video': 'assets/december.mp4', 'transliteration': 'December'},
+    {'word': 'ಸೇಬುಹಣ್ಣು', 'video': 'assets/apple.mp4', 'transliteration': 'Apple'},
+    {'word': 'ಬಾಳೆಹಣ್ಣು', 'video': 'assets/banana.mp4', 'transliteration': 'Banana'},
+    {'word': 'ಕಿತ್ತಳೆ', 'video': 'assets/orange.mp4', 'transliteration': 'Orange'},
+    {'word': 'ದ್ರಾಕ್ಷಿ', 'video': 'assets/grapes.mp4', 'transliteration': 'Grapes'},
+    {'word': 'ಕಲ್ಲಂಗಡಿ', 'video': 'assets/watermelon.mp4', 'transliteration': 'Watermelon'},
+    {'word': 'ಮೋಸಂಬಿ', 'video': 'assets/valencia_orange.mp4', 'transliteration': 'Valencia Orange'},
+    {'word': 'ಚಳಿಗಾಲ', 'video': 'assets/winter.mp4', 'transliteration': 'Winter'},
+    {'word': 'ಬೇಸಿಗೆ', 'video': 'assets/summer.mp4', 'transliteration': 'Summer'},
+    {'word': 'ಮಳೆಯ', 'video': 'assets/rainy.mp4', 'transliteration': 'Rainy'},
+    {'word': 'ದಿನ', 'video': 'assets/day.mp4', 'transliteration': 'Day'},
+    {'word': 'ದಿನ', 'video': 'assets/night.mp4', 'transliteration': 'Night'},
+    {'word': 'ಬೆಳಗಿನ', 'video': 'assets/morning.mp4', 'transliteration': 'Morning'},
+    {'word': 'ಮಧ್ಯಾಹ್ನ', 'video': 'assets/afternoon.mp4', 'transliteration': 'Afternoon'},
+    {'word': 'ಸಾಯಂಕಾಲ', 'video': 'assets/evening.mp4', 'transliteration': 'Evening'},
   ];
 
   List<Map<String, String>> _filteredVyanjanas = [];
@@ -313,7 +344,7 @@ class _KannadaAlphabetsPageState extends State<KannadaAlphabetsPage> {
                     top: 8,
                     right: 8,
                     child: IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white),
+                      icon: const Icon(Icons.close, color: Colors.black),
                       onPressed: () {
                         videoPlayerController.pause();
                         Navigator.of(context).pop();

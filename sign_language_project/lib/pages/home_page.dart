@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sign Language App'),
+        title: const Text('KSLCue'),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent, // Making app bar transparent to blend with background
@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
             children: [
               const SizedBox(height: kToolbarHeight + 20),
               Text(
-                'Welcome! Choose a function:',
+                'Welcome!',
                 style: GoogleFonts.poppins(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -55,7 +55,7 @@ class HomePage extends StatelessWidget {
                     _buildGridItem(
                       context,
                       iconData: 'assets/kannada_letter.png',
-                      label: 'Kannada Alphabets',
+                      label: 'Search Signs',
                       route: const KannadaAlphabetsPage(),
                     ),
                     _buildGridItem(

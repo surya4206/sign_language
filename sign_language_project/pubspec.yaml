@@ -60,6 +60,37 @@ flutter:
     - assets/sign_language_dha.jpg
     - assets/sign_language_ddha.jpg
     - assets/sign_language_na4.jpg
-    - assets/apple.mp4
+    - assets/monday.mp4
+    - assets/tuesday.mp4
     - assets/wednesday.mp4
+    - assets/thursday.mp4
+    - assets/friday.mp4
+    - assets/saturday.mp4
+    - assets/sunday.mp4
+    - assets/january.mp4
+    - assets/february.mp4
+    - assets/march.mp4
+    - assets/april.mp4
+    - assets/may.mp4
+    - assets/june.mp4
+    - assets/july.mp4
+    - assets/august.mp4
+    - assets/september.mp4
+    - assets/october.mp4
+    - assets/november.mp4
+    - assets/december.mp4
+    - assets/apple.mp4
+    - assets/banana.mp4
+    - assets/orange.mp4
+    - assets/grapes.mp4
+    - assets/watermelon.mp4
+    - assets/valencia_orange.mp4
+    - assets/winter.mp4
+    - assets/summer.mp4
+    - assets/rainy.mp4
+    - assets/day.mp4
+    - assets/night.mp4
+    - assets/morning.mp4
+    - assets/afternoon.mp4
+    - assets/evening.mp4
     - assets/Sign-Language-Recognition.tflite
